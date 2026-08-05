@@ -1,14 +1,33 @@
+const { productoSchema } = require("../validators/producto.schema");
+const productosService = require("../services/productos.service");
+
 const crearProducto = async (req, res) => {
     try {
-        const { nombre, precio, stock, correo } = req.body;
-        console.log("Intentando registrar producto:", { nombre, precio , stock, correo});
+        //Validacion
+        const datosValidos = productoSchema.parse(req.body);
+        const {nombre, correo} = datosValidos;
 
-        return res.status(200).json({ message: "Controlador POST /producto alcanzado correctamente" });
+        //Verificar si el producto existe
+        const existe = await productosService.verificarProductoDuplicado(nombre, correo);
+        if(existe) {
+            return res.status(409).json({ error: `El producto "${nombre}" ya existe.`});
+        }
+
+        await productosService.registrarProductoBD(datosValidos);
+        return res.status(200).json({ message: "Producto registrado" });
+
     } catch (error) {
-        console.error("Error en crearProducto:", error);
-        res.status(500).json({ message: "Error al registrar producto" });
-    }
-};
+        // Manejo de errores de validación
+        if(error.name === "ZodError") {
+            return res.status(400).json({ 
+                error: "Campos requeridos o con validaciones incorrectas."
+            });
+        }
+
+        console.error("Error al crear el producto:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    };
+}
 
 module.exports = {
     crearProducto
