@@ -47,9 +47,42 @@ const listarProductos = async (req, res) => {
     }
 }
 
+const eliminarProducto = async (req, res) => {
+    try {
+        const { idProducto, correo } = req.body;
 
+        if (!idProducto) {
+            return res.status(400).json({ error: "El ID del producto es obligatorio para poder eliminarlo." });
+        }
+        // buscamos el producto en la base de datos por su id
+        const producto = await productosService.obtenerProductoPorId(idProducto);
+        // Validamos la existencia del producto
+        if (!producto) {
+            return res.status(409).json({ error: "El producto no existe." });
+        }
+        //Validad que pertenezca al correo enviado(si se envia en el body)
+        if (correo && producto.correo !== correo) {
+            return res.status(409).json({ error: "El producto indicado no existe" });
+
+        }
+        //  Solo se eliminara si el stock es estrictamente igual a 0
+        if(producto.stock>0){
+            return res.status(409).json({ error: `El producto "${producto.nombre}" tiene stock: "${producto.stock}".` });
+        }
+        
+        // Si pasa todas las validaciones, se elimina de DynamoDB
+        await productosService.eliminarProductoBD(idProducto);
+
+        // Respuesta esperada por el cliente
+        return res.status(200).json({ message: "Producto eliminado." });
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+} 
 
 module.exports = {
     crearProducto,
-    listarProductos
+    listarProductos,
+    eliminarProducto
 };

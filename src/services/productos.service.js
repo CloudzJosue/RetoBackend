@@ -1,5 +1,5 @@
 const { dynamoClient, TABLE_NAME } = require("../config/dynamo");
-const {PutCommand, ScanCommand} = require("@aws-sdk/lib-dynamodb");
+const { PutCommand, ScanCommand, GetCommand, DeleteCommand } = require("@aws-sdk/lib-dynamodb");
 const crypto = require("crypto");
 
 const verificarProductoDuplicado = async (nombre, correo) =>{
@@ -65,10 +65,18 @@ const obtenerProductosPorCorreo = async (correo) => {
 
 }
 
+const eliminarProductoBD = async (idProducto) => {
+    const params = {
+        TableName: TABLE_NAME,
+        Key: { idProducto }
+    };
+    await dynamoClient.send(new DeleteCommand(params));
+}
+
 module.exports = {
     verificarProductoDuplicado,
     registrarProductoBD,
     obtenerProductoPorId,
     obtenerProductosPorCorreo,
-
+    eliminarProductoBD
 };
