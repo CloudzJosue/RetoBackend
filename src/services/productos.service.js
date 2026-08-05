@@ -39,7 +39,36 @@ const registrarProductoBD = async (datosProducto) => {
     return nuevoProducto;
 }
 
+const obtenerProductoPorId = async (idProducto) => {
+    const params = {
+        TableName: TABLE_NAME,
+        Key: { idProducto }
+    };
+    const resultado = await dynamoClient.send(new GetCommand(params));
+    return resultado.Item;
+}
+
+const obtenerProductosPorCorreo = async (correo) => {
+    const params = {
+        TableName: TABLE_NAME,
+        FilterExpression: "correo = :correo",
+        ExpressionAttributeValues: {
+            ":correo": correo
+        }
+    }
+    const resultado = await dynamoClient.send(new ScanCommand(params));
+    let productos = resultado.Items || [];
+
+    productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+    return productos
+
+}
+
 module.exports = {
     verificarProductoDuplicado,
-    registrarProductoBD
+    registrarProductoBD,
+    obtenerProductoPorId,
+    obtenerProductosPorCorreo,
+
 };

@@ -29,6 +29,27 @@ const crearProducto = async (req, res) => {
     };
 }
 
+const listarProductos = async (req, res) => {
+    try{
+
+        const correo = req.query.correo || req.body.correo;
+        if(!correo) {
+            return res.status(400).json({ error: "El correo es obligatorio para listar los productos." });
+        }
+
+        const productos = await productosService.obtenerProductosPorCorreo(correo);
+        return res.status(200).json(productos);
+    } catch (error){
+
+        console.error("Error al listar los productos:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+
+    }
+}
+
+
+
 module.exports = {
-    crearProducto
+    crearProducto,
+    listarProductos
 };
