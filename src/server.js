@@ -1,11 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 
+//Importacion de rutas
+const productosRoutes = require("./routes/productos.routes");
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Se usara middleware para que la api entienda los json que envie el cliente
 app.use(express.json());
+
+// inyeccion de rutas al servidor
+app.use("/", productosRoutes);
 
 //Ruta de prueba para verificar que el serivor esta respondiendo
 app.get("/api", (req, res) => {
