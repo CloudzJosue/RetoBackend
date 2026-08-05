@@ -63,6 +63,7 @@ El proyecto sigue una arquitectura basada en la separacion de responsabilidades
 *   `express`: Framework web
 *   `@aws-sdk/client-dynamodb` / `@aws-sdk/lib-dynamodb`: Interaccion con aws.
 *   `dotenv`: Manejo de variables de entorno
+*   `zod`: validar esquemas de entrada
 
 ---
 
@@ -89,7 +90,7 @@ La API interactua con la tabla NoSQL `ProductosReto` en DynamoDB (Region: us-eas
 ## 5. Documentacion tecnica - Especificacion APi
 
 ### Aspectos relevantes y modo de invocacion
-Se incluye en la raiz del proyecto un archivo `.json` de postman (`CBN-Reto.postman_collection.json) con todos los endpoints configurados y listos para ser importados e invocados por los evaluadores
+Se incluye en la raiz del proyecto un archivo `.json` de postman (`docs/postman_collection.json`) con todos los endpoints configurados y listos para ser importados e invocados por los evaluadores
 
 ### Endpoints (Diagramas logicos)
 *   **POST `/producto`**
@@ -105,4 +106,4 @@ Se incluye en la raiz del proyecto un archivo `.json` de postman (`CBN-Reto.post
 ### Herramientas
 *   Nodejs
 *   Postman
-*   AWS console
+*   AWS consoles
