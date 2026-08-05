@@ -1,0 +1,235 @@
+{
+	"info": {
+		"name": "Reto Backend - CBN Tech (Casos Completos)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST /producto",
+			"item": [
+				{
+					"name": "1.1 Éxito - Registrar Producto (200)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Monitor Gamer 144hz\",\n    \"precio\": 850.50,\n    \"stock\": 15,\n    \"correo\": \"josue@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1.2 Error - Validación de Campos (400)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"\",\n    \"precio\": -10,\n    \"stock\": -5,\n    \"correo\": \"correo-invalido\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1.3 Conflicto - Producto Duplicado (409)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Monitor Gamer 144hz\",\n    \"precio\": 900.00,\n    \"stock\": 5,\n    \"correo\": \"josue@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET /productos",
+			"item": [
+				{
+					"name": "2.1 Éxito - Listar Productos Ordenados (200)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/productos?correo=josue@ejemplo.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"productos"
+							],
+							"query": [
+								{
+									"key": "correo",
+									"value": "josue@ejemplo.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.2 Error - Falta Correo (400)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/productos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"productos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE /producto",
+			"item": [
+				{
+					"name": "3.1 Conflicto - Producto con Stock Mayor a 0 (409)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idProducto\": \"PEGA_AQUI_UN_ID_CON_STOCK\",\n    \"correo\": \"josue@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.2 Conflicto - Producto No Existe (409)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idProducto\": \"id-falso-inexistente\",\n    \"correo\": \"josue@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.3 Éxito - Eliminar Producto con Stock 0 (200)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idProducto\": \"PEGA_AQUI_UN_ID_CON_STOCK_0\",\n    \"correo\": \"josue@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/producto",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"producto"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
